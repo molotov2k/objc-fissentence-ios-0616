@@ -28,6 +28,4 @@
 
 -(void)replaceWordAtIndex:(NSUInteger)index withWord:(NSString *)word;
 
-
-
 @end

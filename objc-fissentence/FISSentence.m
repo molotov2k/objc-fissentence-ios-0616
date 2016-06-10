@@ -10,7 +10,7 @@
 
 @interface FISSentence ()
 
-@property (nonatomic, strong, readwrite) NSString *sentence;
+@property (strong, nonatomic, readwrite) NSString *sentence;
 
 @end
 
@@ -19,31 +19,29 @@
 
 ////////// PRIVATE /////////////
 -(void)assembleSentece {
-    self.sentence = [[NSString alloc] init];
-    for (NSString *word in self.words)
-        self.sentence = [self.sentence stringByAppendingFormat:@"%@ ", word];
-    self.sentence = [self.sentence substringToIndex:self.sentence.length - 1];
-    if (self.punctuation.length != 0)
-        self.sentence = [self.sentence stringByAppendingString:self.punctuation];
+    self.sentence = [self.words componentsJoinedByString:@" "];
+    self.sentence = [self.sentence stringByAppendingString:self.punctuation];
 }
 
 -(BOOL)validWord:(NSString *)word {
-    if (word.length != 0)
-    if (![word containsString:@" "])
-    return true;
+    if ((word.length != 0) && ![word containsString:@" "]) {
+        return true;
+    }
     return false;
 }
 
 -(BOOL)validPunctuation:(NSString *)punctuation {
-    NSArray *validPunctuation = @[@"!", @"?", @"."];
-    if ([validPunctuation containsObject:punctuation])
-    return true;
+    NSString *validPunctuation = @"!?.,;:-";
+    if ((punctuation.length != 0) && [validPunctuation containsString:punctuation]) {
+        return true;
+    }
     return false;
 }
 
 -(BOOL)validIndex:(NSUInteger)index {
-    if (index < self.words.count)
-    return true;
+    if (index < self.words.count) {
+        return true;
+    }
     return false;
 }
 
@@ -51,8 +49,9 @@
 
 ////////// PUBLIC /////////////
 -(void)addWord:(NSString *)word {
-    if ([self validWord:word])
+    if ([self validWord:word]) {
         [self.words addObject:word];
+    }
     [self assembleSentece];
 }
 
@@ -70,20 +69,23 @@
 }
 
 -(void)removeWordAtIndex:(NSUInteger)index {
-    if ([self validIndex:index])
+    if ([self validIndex:index]) {
         [self.words removeObjectAtIndex:index];
+    }
     [self assembleSentece];
 }
 
 -(void)insertWord:(NSString *)word atIndex:(NSUInteger)index {
-    if ([self validWord:word] && [self validIndex:index])
+    if ([self validWord:word] && [self validIndex:index]) {
         [self.words insertObject:word atIndex:index];
+    }
     [self assembleSentece];
 }
 
 -(void)replacePunctuationWithPunctuation:(NSString *)punctuation {
-    if ([self validPunctuation:punctuation])
+    if ([self validPunctuation:punctuation]) {
         self.punctuation = punctuation;
+    }
     [self assembleSentece];
 }
 
